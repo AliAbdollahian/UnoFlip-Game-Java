@@ -12,9 +12,8 @@ public class Deck {
     private List<Card> pile;
     private Card crd;
 
-
-    private int currCD;
-    private int currCP;
+    //private int currCD;
+    //private int currCP;
 
     public Deck(){
         this.deck = new ArrayList<Card>(112);
