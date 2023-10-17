@@ -23,7 +23,12 @@ public class Deck {
 
     //check if the deck is empty
     public boolean isEmpty(){
-        return deck.isEmpty();
+        if(deck.isEmpty()){
+            pile=deck;
+            shuffleDeck();
+        }
+        //continue game
+        //play a card immidiately after
     }
     public void shuffleDeck(){
         Collections.shuffle(deck, new Random());
