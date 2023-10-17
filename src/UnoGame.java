@@ -4,39 +4,59 @@ import java.util.ArrayList;
 public class UnoGame {
     public List<Player> players;
     public Deck deck;
-    public Boolean cardSide;
+    public Side cardSide;
     public Card currentCard;
+    public boolean clockwise;
 
-    public UnoGame(){
-        cardSide = true;
+    public UnoGame(){ // Antonio
+        cardSide = Side.LIGHT;
+        deck = new Deck();
+        clockwise = true;
     }
 
-    public void Play(){}
-
-    public void dealHand(){}
-
-    public void drawCard(Player player){}
-
-    public int calculateScore(Player){}
-
-    public void invokeEffect(Card){}
-
-    public void flip(){
-        cardSide = !cardSide;
+    public void Play(){ // Ali
+        dealHand();
+        // place first card in discard pile
     }
 
-    public void draw(Player player, int num){
+    public void dealHand(){} // Antonio
+
+    public void drawCard(Player player){} // Ali
+
+    public int calculateScore(Player player){} // Ali
+
+    public void invokeEffect(Card card){} // Antonio
+
+    public void flip(){ // Antonio
+        if(cardSide.equals(Side.LIGHT)){
+            cardSide = Side.DARK;
+        }
+        else{
+            cardSide = Side.LIGHT;
+        }
     }
 
-    public boolean isValid(Card card){}
-
-    public boolean isHandEmpty(){}
-
-    public boolean isDeckEmpty(){
+    public void draw(Player player, int num){ // Ali
     }
 
-    public void newRound(){}
+    public void reverse(){ // Antonio
+        clockwise = !clockwise;
+    }
 
-    public void endGame(){}
+    public boolean isValid(Card card){ // Ali
+    }
+
+    public boolean isHandEmpty(Player player){ // Antonio
+    }
+
+    public boolean isDeckEmpty(){ // Ali
+    }
+
+    public void newRound(){} // Ali
+
+    public void endGame(){} // Antonio
+
+    public static void main(String[] args) {
+    }
 
 }
