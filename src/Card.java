@@ -4,6 +4,7 @@ public class Card {
     private final Color darkBorder;
     private final Value lightNum;
     private final Value darkNum;
+    private UNOGame cardSide;
 
     public Card (Color lightBorder, Color darkBorder, Value lightNum, Value darkNum){
         this.lightBorder = lightBorder;
@@ -32,7 +33,7 @@ public class Card {
 
         //unogame if currentCard == lightBorder{ this.lightNum && this.l} else { this.darkBorder && this.darkNum};
         String str = " ";
-        if (UNO.cardSide == lightSide){
+        if (cardSide == lightSide){
             str = this.lightBorder + ": " + this.lightNum;
         }
         else{
