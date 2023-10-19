@@ -51,7 +51,7 @@ public class Deck {
                 deck.add(new Card(Color.yellow, Color.purple, Value.values()[j], Value.values()[j]));
             }
 
-            for (int m=1; m<=4; m++){
+            for (int m=1; m<=2; m++){
                 deck.add(new Card(Color.special, Color.special, Value.WILD, Value.WILD));
                 deck.add(new Card(Color.special,  Color.special, Value.WILD_DRAW_2, Value.WILD_DRAW_COLOR));
                 //deck.add(new Card(Color.red, Color.orange, Value.values()[j], Value.values()[j]));
@@ -60,13 +60,14 @@ public class Deck {
 
             // DRAW_1, DRAW_5, REVERSE, SKIP, SKIP_EVERYONE, FLIP,
             for (int m=1; m<=2; m++) {
-                deck.add(new Card(Color.blue, Color.pink, Value.WILD, Value.DRAW_5));
+                deck.add(new Card(Color.blue, Color.pink, Value.REVERSE, Value.DRAW_5));
                 deck.add(new Card(Color.green, Color.teal, Value.REVERSE, Value.REVERSE));
+                deck.add(new Card(Color.red, Color.orange, Value.REVERSE, Value.SKIP_EVERYONE));
+                deck.add(new Card(Color.yellow, Color.purple, Value.REVERSE, Value.FLIP));
+                deck.add(new Card(Color.blue, Color.pink, Value.SKIP, Value.DRAW_5));
+                deck.add(new Card(Color.green, Color.teal, Value.SKIP, Value.REVERSE));
                 deck.add(new Card(Color.red, Color.orange, Value.SKIP, Value.SKIP_EVERYONE));
-                deck.add(new Card(Color.yellow, Color.purple, Value.WILD_DRAW_2, Value.FLIP));
-                //deck.add(new Card(Color.special, Color.special, Value.FLIP, Value.REVERSE));
-                //deck.add(new Card(Color.special, Color.special, Value.FLIP, Value.REVERSE));
-                //deck.add(new Card(Color.yellow, Color.purple, Value.values()[j], Value.values()[j]));
+                deck.add(new Card(Color.yellow, Color.purple, Value.SKIP, Value.FLIP));
             }
         }
 
