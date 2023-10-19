@@ -58,7 +58,7 @@ public class Deck {
                 //deck.add(new Card(Color.yellow, Color.purple, Value.values()[j], Value.values()[j]));
             }
 
-            // DRAW_1, DRAW_5, REVERSE, SKIP, SKIP_EVERYONE, FLIP,
+            // DRAW_1, DRAW_5, REVERSE, SKIP, SKIP_EVERYONE, FLIP, WILD
             for (int m=1; m<=2; m++) {
                 deck.add(new Card(Color.blue, Color.pink, Value.REVERSE, Value.DRAW_5));
                 deck.add(new Card(Color.green, Color.teal, Value.REVERSE, Value.REVERSE));
