@@ -197,8 +197,7 @@ public UnoGame(int numPlayers) {
 
     public class MainClass {
         public static void main(String[] args) {
-            
-            UnoGame unoGame = new UnoGame();
+
         }
     }
 }
