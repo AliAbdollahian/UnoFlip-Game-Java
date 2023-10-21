@@ -1,6 +1,7 @@
 package src;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class UnoGame {
     public List<Player> players;
@@ -9,17 +10,78 @@ public class UnoGame {
     public Card currentCard;
     public boolean clockwise;
 
-    public UnoGame() { // Antonio
-        cardSide = Side.LIGHT;
-        deck = new Deck();
-        deck.UNODeck();
-        clockwise = true;
+//    public UnoGame() { // Antonio
+//        cardSide = Side.LIGHT;
+//        deck = new Deck();
+//        deck.UNODeck();
+//        clockwise = true;
+//
+//    }
+public UnoGame(int numPlayers) {
+    players = new ArrayList<>();
+    deck = new Deck();
+    deck.shuffleDeck();
+    clockwise = true;
+
+    for (int i = 1; i <= numPlayers; i++) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter name for Player " + i + ": ");
+        String playerName = scanner.nextLine();
+        players.add(new Player(playerName));
     }
 
+    currentCard = deck.removeFromDeck();
+}
+
     public void Play() { // Ali
-        dealHand();
-        currentCard = deck.removeFromDeck();
-        // place first card in discard pile
+        boolean roundWon = false;
+        int currentPlayerIndex = 0;
+
+        while (!roundWon) {
+            Player currentPlayer = players.get(currentPlayerIndex);
+
+            System.out.println("Current side: " + currentCard.getLightBorder());
+            System.out.println(currentPlayer.getName() + "'s Turn.");
+            System.out.println("Your cards:");
+            displayPlayerHand(currentPlayer);
+            System.out.println("Top card: " + currentCard);
+
+            System.out.print("Enter card index to play or 0 to draw a card: ");
+            Scanner scanner = new Scanner(System.in);
+            int choice = scanner.nextInt();
+
+            if (choice == 0) {
+                Card drawnCard = deck.removeFromDeck();
+                currentPlayer.addCard(drawnCard);
+                System.out.println("Drew a card: " + drawnCard);
+            } else {
+                Card playedCard = currentPlayer.playCard(choice - 1);
+
+                if (playedCard != null && isValid(playedCard)) {
+                    currentCard = playedCard;
+                    System.out.println("Played: " + playedCard);
+                } else {
+                    System.out.println("Invalid move. Try again.");
+                }
+            }
+
+            if (currentPlayer.getHand().isEmpty()) {
+                roundWon = true;
+                System.out.println(currentPlayer.getName() + " wins!");
+            }
+
+            if (!clockwise) {
+                currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
+            } else {
+                currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            }
+        }
+    }
+    private void displayPlayerHand(Player player) {
+        List<Card> hand = player.getHand();
+        for (int i = 0; i < hand.size(); i++) {
+            System.out.println((i + 1) + ". " + hand.get(i));
+        }
     }
 
     public void dealHand() {
@@ -27,10 +89,10 @@ public class UnoGame {
 
     public void drawCard(Player player) {
         Card drawnCard = deck.removeFromDeck();
-        player.addToPile(drawnCard);
+        player.drawCard(drawnCard);
     } // Ali
 
-    public void calculateScore(Player winnerOfRound) {
+    public int calculateScore(Player winnerOfRound) {
         int totalScore = 0;
         for (Player player : players) {
             if (player != winnerOfRound)
@@ -70,7 +132,8 @@ public class UnoGame {
                 }
         }
         System.out.println(winnerOfRound.getName() + " scored " + totalScore + " points this round.");
-        winnerOfRound.score = winnerOfRound.score +  totalScore;
+        winnerOfRound.setScore(winnerOfRound.getScore() + totalScore);
+        return totalScore;
     }
     public void invokeEffect(Card card){} // Antonio
 
@@ -122,6 +185,21 @@ public class UnoGame {
 
     } // Ali
 
-    public void endGame(){} // Antonio
+    public void endGame(){
+        System.out.println("Game over! Final scores:");
 
+        for (Player player : players) {
+            int score = calculateScore(player);
+            System.out.println(player.getName() + ": " + score);
+            player.setScore(score);
+        }
+    } // Antonio
+
+    public class MainClass {
+        public static void main(String[] args) {
+            
+            UnoGame unoGame = new UnoGame();
+        }
+    }
 }
+
