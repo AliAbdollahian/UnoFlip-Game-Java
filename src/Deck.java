@@ -17,7 +17,8 @@ public class Deck {
 
     public Deck(){
         this.deck = new ArrayList<Card>(112);
-        this.pile = new ArrayList<Card>();
+        this.pile = new ArrayList<Card>(112);
+        this.UNODeck();
     }
 
     //check if the deck is empty
@@ -70,6 +71,7 @@ public class Deck {
                 deck.add(new Card(Color.yellow, Color.purple, Value.SKIP, Value.FLIP));
             }
         }
+        this.shuffleDeck();
 
     }
      public void addToPile(){
@@ -81,5 +83,13 @@ public class Deck {
         //print statement
 
      }
+
+    public int getDeckSize(){
+        return deck.size();
+     }
+
+    public int getPileSize(){
+        return pile.size();
+    }
 
 }
