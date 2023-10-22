@@ -10,37 +10,32 @@ public class UnoGame {
     public Card currentCard;
     public boolean clockwise;
 
-//    public UnoGame() { // Antonio
-//        cardSide = Side.LIGHT;
-//        deck = new Deck();
-//        deck.UNODeck();
-//        clockwise = true;
-//
-//    }
-public UnoGame(int numPlayers) {
-    players = new ArrayList<>();
-    deck = new Deck();
-    deck.shuffleDeck();
-    clockwise = true;
+    public UnoGame(int numPlayers) {
+        players = new ArrayList<>();
+        deck = new Deck();
+        deck.getDeckSize();
+        deck.shuffleDeck();
+        clockwise = true;
+        cardSide = Side.LIGHT;
 
-    for (int i = 1; i <= numPlayers; i++) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter name for Player " + i + ": ");
-        String playerName = scanner.nextLine();
-        players.add(new Player(playerName));
+        for (int i = 1; i <= numPlayers; i++) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter name for Player " + i + ": ");
+            String playerName = scanner.nextLine();
+            players.add(new Player(playerName));
+        }
+
+        currentCard = deck.removeFromDeck();
     }
 
-    currentCard = deck.removeFromDeck();
-}
-
-    public void Play() { // Ali
+    public void play() { // Ali
         boolean roundWon = false;
         int currentPlayerIndex = 0;
-
+        this.dealHand();
         while (!roundWon) {
             Player currentPlayer = players.get(currentPlayerIndex);
 
-            System.out.println("Current side: " + currentCard.getLightBorder());
+            System.out.println("Current side: " + cardSide);
             System.out.println(currentPlayer.getName() + "'s Turn.");
             System.out.println("Your cards:");
             displayPlayerHand(currentPlayer);
@@ -65,7 +60,7 @@ public UnoGame(int numPlayers) {
                 }
             }
 
-            if (currentPlayer.getHand().isEmpty()) {
+            if (isHandEmpty(currentPlayer)) {
                 roundWon = true;
                 System.out.println(currentPlayer.getName() + " wins!");
             }
@@ -85,11 +80,16 @@ public UnoGame(int numPlayers) {
     }
 
     public void dealHand() {
+        for(Player p : players){
+            for(int i = 0; i < 7; i++) {
+                p.addCard(deck.removeFromDeck());
+            }
+        }
     } // Antonio
 
     public void drawCard(Player player) {
         Card drawnCard = deck.removeFromDeck();
-        player.drawCard(drawnCard);
+        player.addCard(drawnCard);
     } // Ali
 
     public int calculateScore(Player winnerOfRound) {
@@ -135,7 +135,9 @@ public UnoGame(int numPlayers) {
         winnerOfRound.setScore(winnerOfRound.getScore() + totalScore);
         return totalScore;
     }
-    public void invokeEffect(Card card){} // Antonio
+    public void invokeEffect(Card card){
+
+    } // Antonio
 
     public void flip(){ // Antonio
         if(cardSide.equals(Side.LIGHT)){
@@ -161,7 +163,8 @@ public UnoGame(int numPlayers) {
         return card.getLightNum() == currentCard.getLightNum() || currentCard.getLightBorder() == card.getLightBorder();
     }
 
-    public boolean isHandEmpty(Player player){ // Antonio
+    public boolean isHandEmpty(Player player){// Antonio
+        return player.getHand().isEmpty();
     }
 
     public boolean isDeckEmpty(){ // Ali
@@ -195,10 +198,13 @@ public UnoGame(int numPlayers) {
         }
     } // Antonio
 
-    public class MainClass {
-        public static void main(String[] args) {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
-        }
+        System.out.println("Enter the number of players: ");
+        int numPlayers = sc.nextInt();
+        UnoGame unoGame = new UnoGame(numPlayers);
+        unoGame.play();
     }
 }
 

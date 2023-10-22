@@ -1,5 +1,6 @@
 package src;
 
+import java.util.ArrayList;
 import java.util.List;
 // represents indiviual players currently in a game
 public class Player {
@@ -7,7 +8,7 @@ public class Player {
     private String name;
     private int score;
     public Player(String name) {
-        this.hand = hand;
+        this.hand = new ArrayList<>();
         this.name = name;
         score = 0;
     }

@@ -4,10 +4,10 @@ public enum Color {
     green,
     red,
     yellow,
-    pink,
-    teal,
-    orange,
-    purple,
+//    pink,
+//    teal,
+//    orange,
+//    purple,
     special;
 
     private Color() {
