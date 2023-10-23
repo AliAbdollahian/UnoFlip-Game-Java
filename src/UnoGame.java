@@ -44,6 +44,7 @@ public class UnoGame {
         boolean roundWon = false;
         int currentPlayerIndex = 0;
         this.dealHand();
+        boolean skipNext = false;
 
         while (!roundWon) {
             Player currentPlayer = players.get(currentPlayerIndex);
@@ -54,7 +55,7 @@ public class UnoGame {
             displayPlayerHand(currentPlayer);
             System.out.println("Top card: " + currentCard);
 
-            boolean isValidChoice = false; // Flag to track if the choice is valid
+            boolean isValidChoice = false;
 
             do {
                 System.out.print("Enter card index to play or 0 to draw a card: ");
@@ -65,23 +66,20 @@ public class UnoGame {
                     Card drawnCard = deck.removeFromDeck();
                     currentPlayer.addCard(drawnCard);
                     System.out.println("Drew a card: " + drawnCard);
-                    isValidChoice = true; // Valid choice, exit the loop.
-                } else if (choice >= 1 && choice <= currentPlayer.getHand().size() && isValid(currentPlayer.getHand().get(choice-1))) {
-
-                        if (currentPlayer.getHand().get(choice-1).getLightNum() == Value.DRAW_1) {
-                            draw(players.get((currentPlayerIndex + 1) % players.size()), 1);
-                            skipNextPlayer();
-                        } else if (currentPlayer.getHand().get(choice-1).getLightNum() == Value.SKIP) {
-                            skipNextPlayer();
-                        } else if (currentPlayer.getHand().get(choice-1).getLightNum() == Value.WILD) {
-
-                            handleWildCardColorSelection(currentPlayer.getHand().get(choice-1));
-                            currentCard.setColor(currentPlayer.getHand().get(choice-1).getLightBorder());
-                        }
+                    isValidChoice = true;
+                } else if (choice >= 1 && choice <= currentPlayer.getHand().size() && isValid(currentPlayer.getHand().get(choice - 1))) {
                     Card playedCard = currentPlayer.playCard(choice - 1);
-                        currentCard = playedCard;
-                        System.out.println("Played: " + playedCard);
-                        isValidChoice = true; // Valid choice, exit the loop.
+                    currentCard = playedCard;
+                    System.out.println("Played: " + playedCard);
+                    isValidChoice = true;
+
+                    if (playedCard.getLightNum() == Value.DRAW_1) {
+                        // Draw 1 logic
+                        draw(players.get((currentPlayerIndex + 1) % players.size()), 1);
+                    } else if (playedCard.getLightNum() == Value.SKIP) {
+                        // Skip logic
+                        skipNext = true;
+                    }
                 } else {
                     System.out.println("Invalid choice. Please enter 0 to draw a card or a valid card index.");
                 }
@@ -92,8 +90,12 @@ public class UnoGame {
                 System.out.println(currentPlayer.getName() + " wins!");
             }
 
-            if (currentCard.getLightNum() != Value.SKIP) {
-                // Advance to the next player, but only if no "Skip" card was played
+            // Check if the next player should be skipped
+            if (skipNext) {
+                currentPlayerIndex = (currentPlayerIndex + 2) % players.size();
+                skipNext = false; // Reset the skip flag
+            } else {
+                // Advance to the next player
                 if (!clockwise) {
                     currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
                 } else {
@@ -102,6 +104,7 @@ public class UnoGame {
             }
         }
     }
+
 
 
     /**

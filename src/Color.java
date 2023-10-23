@@ -8,7 +8,9 @@ public enum Color {
 //    teal,
 //    orange,
 //    purple,
-    special, RED, BLUE;
+    special,
+    RED,
+    BLUE;
 
     private Color() {
 
