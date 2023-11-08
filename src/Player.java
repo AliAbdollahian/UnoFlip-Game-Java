@@ -1,8 +1,14 @@
+/**
+* This class represents individual players currently in a game.
+*/
 package src;
 
 import java.util.ArrayList;
 import java.util.List;
-// represents indiviual players currently in a game
+
+/**
+* Constructor for Player class
+*/
 public class Player {
     private List<Card> hand;
     private String name;
@@ -12,44 +18,57 @@ public class Player {
         this.name = name;
         score = 0;
     }
-    // retrieves indivual players name
+
+    /**
+    * retrieves indivual players name
+    * @return String name
+    */
     public String getName() {
         return this.name;
     }
-    // add card to an indivual players hand
+
+    /**
+    * add card to an indivual players hand
+    */
     public void addCard(Card card) {
         hand.add(card);
     }
-    // gets current score for a player
+
+    /**
+    * gets current score for a player
+    * @return Integer score
+    */
     public Integer getScore() {
         return this.score;
     }
-    // sets score and updates for each indivual player
+
+     /**
+    * sets score and updates for each indivual player
+    */
     public void setScore(int score) {
         this.score = score;
     }
-    // retrives hand
+
+    /**
+    * retrives cards in hand
+    * @return List<Card> in hand
+    */
     public List<Card> getHand() {
         return this.hand;
     }
-    // calculates score of players hand
-//    public int scoreofHand() {
-//        int scoreHand = 0;
-//        int scoreofHand;
-//        for (Card card: hand) {
-//            scoreofHand = scoreofHand + card.getScore();
-//        }
-//        return scoreofHand;
-//    }
-    // player chooses and plays a card
+    
+    /**
+    * player chooses and plays a card
+    * @param index of the played card
+    * @return card played
+    */
     public Card playCard(int index) {
         return (Card) this.hand.remove(index);
     }
-    // player draws a card from the deck
-//    public void drawCard(Card card) {
-//        this.hand.add(card);
-//    }
 
+     /**
+    * empties cards in hand
+    */
     public void clearHand() {
         hand.clear();
     }

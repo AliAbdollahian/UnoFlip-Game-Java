@@ -1,16 +1,13 @@
+/**
+ * This is the Color class for the deck
+ */
 package src;
 public enum Color {
     blue,
     green,
     red,
     yellow,
-//    pink,
-//    teal,
-//    orange,
-//    purple,
-    special,
-    RED,
-    BLUE;
+    special;
 
     private Color() {
 

@@ -1,66 +1,69 @@
+/**
+ * This is the Deck class that initializes  the cards in the deck
+ * to their values, colors, and special values.
+ */
+
 package src;
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-
 public class Deck {
     private List<Card> deck;
-    private List<Card> pile;
-    private Card crd;
 
-
+    /**
+     * Constructor for the Deck Class
+     */
     public Deck(){
         this.deck = new ArrayList<Card>(112);
-        this.pile = new ArrayList<Card>(112);
         this.UNODeck();
     }
 
-    //check if the deck is empty
+
+    /**
+     *Returns true if the deck is empty
+     * @return boolean true
+     */
     public boolean isEmpty(){
         if(deck.isEmpty()){
-            deck=pile;
+            //deck=pile;
             shuffleDeck();
-        }
-        else {
-            //continue game
-            //play a card immidiately after
-
         }
         return true;
     }
+
+    /**
+     * Shuffling the deck by importing the Collections library
+     */
     public void shuffleDeck(){
         Collections.shuffle(deck, new Random());
     }
 
-    public void shufflePile(){
-        Collections.shuffle(pile, new Random());
-    }
-
+    /**
+     * Initialize the cards in the deck
+     */
     public void UNODeck(){
-        //deck.Colo = deck.Color.Values();
-
 
         int i;
-        //for (i=0; i<deck.size(); i++){
-        for (i=1; i<=9; i++){
-            deck.add(new Card(Color.blue, Value.values()[i]));
-            deck.add(new Card(Color.green, Value.values()[i]));
-            deck.add(new Card(Color.red, Value.values()[i]));
-            deck.add(new Card(Color.yellow, Value.values()[i]));
+        for (i=0; i<112; i++) {
+            //for cards numbered 1-9
+            for (i = 1; i <= 9; i++) {
+                deck.add(new Card(Color.blue, Value.values()[i]));
+                deck.add(new Card(Color.green, Value.values()[i]));
+                deck.add(new Card(Color.red, Value.values()[i]));
+                deck.add(new Card(Color.yellow, Value.values()[i]));
+            }
         }
 
+        //for special wild cards
         for (int m=1; m<=2; m++){
             deck.add(new Card(Color.special, Value.WILD));
+            deck.add(new Card(Color.special, Value.DRAW_1));
             deck.add(new Card(Color.special, Value.WILD_DRAW_2));
-            //deck.add(new Card(Color.red, Color.orange, Value.values()[j], Value.values()[j]));
-            //deck.add(new Card(Color.yellow, Color.purple, Value.values()[j], Value.values()[j]));
         }
 
-        // DRAW_1, DRAW_5, REVERSE, SKIP, SKIP_EVERYONE, FLIP,
+        // for two special ooperations, reverse and skip for every card
         for (int m=1; m<=2; m++) {
             deck.add(new Card(Color.blue, Value.REVERSE));
             deck.add(new Card(Color.green, Value.REVERSE));
@@ -72,28 +75,37 @@ public class Deck {
             deck.add(new Card(Color.yellow, Value.SKIP));
 
         }
-        //}
+
         this.shuffleDeck();
-
-        //return null;
-    }
-    public void addToPile(){
-        this.pile.add(crd);
-
     }
 
-    public Card removeFromDeck(){
+
+    /**
+     * This method for drawn card from the deck
+     * @return Card removed from deck
+     */
+     public Card removeFromDeck(){
         return (Card)this.deck.remove(this.deck.size()-1);
         //print statement
 
-    }
+     }
 
-    public int getDeckSize(){
+    /**
+     * calculate the size of the deck
+     * @return int the size
+     */
+     public int getDeckSize(){
         return deck.size();
+     }
+
+    /**
+     * the cards drawn are added to a different pile and shuffeled
+     * @param pile of discarded cards
+     */
+    public void discardedPile(List<Card> pile){
+        this.deck.add((Card) pile);
+        Collections.shuffle(this.deck);
     }
 
-    public int getPileSize(){
-        return pile.size();
-    }
 
 }

@@ -1,3 +1,6 @@
+/**
+ * This is the Value class for the deck
+ */
 package src;
 public enum Value {
     ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,

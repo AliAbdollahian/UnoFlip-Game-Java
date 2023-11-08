@@ -12,7 +12,6 @@ public class UnoGame {
     public Side cardSide;
     public Card currentCard;
     public boolean clockwise;
-    private int currentPlayerIndex;
 
     /**
      * Constructs a new UnoGame with the specified number of players.
@@ -25,7 +24,7 @@ public class UnoGame {
         deck.getDeckSize();
         deck.shuffleDeck();
         clockwise = true;
-        cardSide = Side.LIGHT;
+        cardSide = Side.lightSide;
 
         for (int i = 1; i <= numPlayers; i++) {
             Scanner scanner = new Scanner(System.in);
@@ -76,9 +75,12 @@ public class UnoGame {
                     if (playedCard.getLightNum() == Value.DRAW_1) {
                         // Draw 1 logic
                         draw(players.get((currentPlayerIndex + 1) % players.size()), 1);
+                        skipNext = true;
                     } else if (playedCard.getLightNum() == Value.SKIP) {
                         // Skip logic
                         skipNext = true;
+                    } else{
+                        invokeEffect(playedCard);
                     }
                 } else {
                     System.out.println("Invalid choice. Please enter 0 to draw a card or a valid card index.");
@@ -88,6 +90,18 @@ public class UnoGame {
             if (isHandEmpty(currentPlayer)) {
                 roundWon = true;
                 System.out.println(currentPlayer.getName() + " wins!");
+
+                for (Player player : players) {
+                    System.out.println("The scores are: ");
+                    int score = calculateScore(player);
+                    System.out.println(player.getName() + ": " + score);
+                    player.setScore(score);
+                    if(player.getScore() >= 500){
+                        System.out.println("Game over! The winner is " + player.getName());
+                        System.exit(0);
+                    }
+                }
+
             }
 
             // Check if the next player should be skipped
@@ -106,7 +120,6 @@ public class UnoGame {
     }
 
 
-
     /**
      * Handles the color selection for a Wild card.
      *
@@ -121,19 +134,23 @@ public class UnoGame {
 
         Scanner scanner = new Scanner(System.in);
         int colorChoice = scanner.nextInt();
-
+        Card colorCard;
         switch (colorChoice) {
             case 1:
-                wildCard.setColor(Color.RED);
+                colorCard = new Card(Color.red, null);
+                currentCard = colorCard;
                 break;
             case 2:
-                wildCard.setColor(Color.BLUE);
+                colorCard = new Card(Color.blue, null);
+                currentCard = colorCard;
                 break;
             case 3:
-                wildCard.setColor(Color.green);
+                colorCard = new Card(Color.green, null);
+                currentCard = colorCard;
                 break;
             case 4:
-                wildCard.setColor(Color.yellow);
+                colorCard = new Card(Color.yellow, null);
+                currentCard = colorCard;
                 break;
             default:
                 System.out.println("Invalid color choice. try again");
@@ -165,16 +182,6 @@ public class UnoGame {
         }
     } // Antonio
 
-
-    /**
-     * Draws a card from the deck and adds it to the player's hand.
-     *
-     * @param player The player who will draw the card.
-     */
-    public void drawCard(Player player) {
-        Card drawnCard = deck.removeFromDeck();
-        player.addCard(drawnCard);
-    } // Ali
 
 
 
@@ -229,23 +236,27 @@ public class UnoGame {
     }
 
 
-
-    public void invokeEffect(Card card){
-    } // Antonio
-
-
-
     /**
-     * Flips the card side from LIGHT to DARK or vice versa.
-     */
-    public void flip(){ // Antonio
-        if(cardSide.equals(Side.LIGHT)){
-            cardSide = Side.DARK;
+    * invokes other effects that do not deal with skipping a player's turn. 
+    *
+    * @param card The card that has its effect being invoked.
+    */
+    public void invokeEffect(Card card){
+        switch (card.getLightNum()) {
+            case REVERSE:
+                reverse();
+                break;
+            case WILD:
+                wild(card);
+                break;
+            default:
+                // Handle other special cards if needed
         }
-        else{
-            cardSide = Side.LIGHT;
-        }
-    }
+}// Antonio
+
+public void wild(Card card) {
+    handleWildCardColorSelection(card);
+}
 
 
     /**
@@ -260,7 +271,7 @@ public class UnoGame {
             player.addCard(drawnCard);
             System.out.println(player.getName() + " drew a card: " + drawnCard);
         }
-    }//ALi
+    }//Ali
 
 
     /**
@@ -270,8 +281,6 @@ public class UnoGame {
         clockwise = !clockwise;
     }
 
-
-
     /**
      * Checks if a played card is valid according to UNO rules.
      *
@@ -279,7 +288,7 @@ public class UnoGame {
      * @return true if the card is valid, false otherwise.
      */
     public boolean isValid(Card card) {
-        if (cardSide == Side.LIGHT) {
+        if (cardSide == Side.lightSide) {
             if (card.getLightNum() != Value.WILD && card.getLightNum() != Value.WILD_DRAW_2) {
                 if (currentCard.getLightNum() != Value.WILD && currentCard.getLightNum() != Value.WILD_DRAW_2) {
                     return card.getLightBorder() == currentCard.getLightBorder() || card.getLightNum() == currentCard.getLightNum();
@@ -291,9 +300,6 @@ public class UnoGame {
         return false;
     }
 
-
-
-
     /**
      * Checks if the specified player's hand is empty.
      *
@@ -304,85 +310,6 @@ public class UnoGame {
         return player.getHand().isEmpty();
     }
 
-
-
-
-    /**
-     * Checks if the game deck is empty.
-     *
-     * @return true if the game deck is empty, false otherwise.
-     */
-    public boolean isDeckEmpty(){ // Ali
-        return deck.isEmpty();
-    }
-
-
-
-    /**
-     * Starts a new round of the game by clearing hands, shuffling the deck, and dealing new hands.
-     */
-    public void newRound(){
-        for (Player player : players) {
-            player.clearHand();
-        }
-        deck.shuffleDeck();
-        dealHand();
-
-        currentCard = deck.removeFromDeck();
-        cardSide = Side.LIGHT;
-        clockwise = true;
-    } // Ali
-
-    /**
-     * Handles special actions associated with a given card, such as reversing the game direction,
-     * skipping the next player's turn, or implementing color selection logic for a wild card.
-     *
-     * @param card The card for which special actions need to be handled.
-     */
-    private void handleSpecialCardActions(Card card) {
-        switch (card.getLightNum()) {
-            case REVERSE:
-                reverse();
-                break;
-            case SKIP:
-                skipNextPlayer();
-                break;
-            case WILD:
-                // Implement color selection logic
-                break;
-            default:
-                // Handle other special cards if needed
-        }
-    }
-
-
-    /**
-     * Skips to the next player in the game, taking into account the game's direction (clockwise or counterclockwise).
-     */
-    private void skipNextPlayer() {
-        if (clockwise) {
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        } else {
-            currentPlayerIndex = (currentPlayerIndex - 1 + players.size()) % players.size();
-        }
-    }
-
-
-    /**
-     * Ends the UNO game and calculates the final scores for all players.
-     */
-    public void endGame(){
-        System.out.println("Game over! Final scores:");
-
-        for (Player player : players) {
-            int score = calculateScore(player);
-            System.out.println(player.getName() + ": " + score);
-            player.setScore(score);
-        }
-    } // Antonio
-
-
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -392,4 +319,3 @@ public class UnoGame {
         unoGame.play();
     }
 }
-
