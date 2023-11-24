@@ -140,14 +140,15 @@ ___________
 - Buttons do not work.
 - Player info is not saved.
 
+Milestone 3 Known Issues:
+___________
+- NONE.
+
 
 
 
 next steps:
 ___________
-- Transition the text-based playable version of Uno Flip to a GUI-based iteration (Done)
-- Add Uno Flip cards to game with related rules and scoring mechanisms (Done)
-- Implement AI Player Capability with intelligent gameplay
 - Add Redo Capabilities so players can undo moves made by mistake
 - Add Replay Capability of the game
 - Implement a Save/Load system 
