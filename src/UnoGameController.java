@@ -87,13 +87,13 @@ public class UnoGameController implements ActionListener {
      */
     public void nextPlayerClicked() {
         checkForWinner();
-            unoView.drawCard.setEnabled(true);
-            unoGame.nextPlayer(unoGame.currentPlayerIndex);
+        unoView.drawCard.setEnabled(true);
+        unoGame.nextPlayer(unoGame.currentPlayerIndex);
 //            unoView.handPanel.setEnabled(true);
-            setPlayerName();
-            unoView.displaySampleCards(UnoGame.getCurrentSide());
-            unoView.status.setText(unoGame.getCurrentPlayer().getName() + "'s turn to play!");
-            unoView.nextPlayer.setEnabled(false);
+        setPlayerName();
+        unoView.displaySampleCards(UnoGame.getCurrentSide());
+        unoView.status.setText(unoGame.getCurrentPlayer().getName() + "'s turn to play!");
+        unoView.nextPlayer.setEnabled(false);
         if (checkForAI()){
             handleAIPlayerTurn();
             AIHandleGui();
@@ -101,6 +101,9 @@ public class UnoGameController implements ActionListener {
 
     }
 
+    /**
+     * Handles AIPlayer's turn but disbaling the button panel, and playing in the terminal.
+     */
     public void handleAIPlayerTurn(){
         disableButtons();
         UnoPlayer ai = unoGame.getCurrentPlayer();
@@ -108,7 +111,7 @@ public class UnoGameController implements ActionListener {
         for (UnoCard card : hand) {
             if (unoGame.isValidPlay(UnoGame.topCard,card)) {
                 if (notASpecialCard(card)){
-                 handleRegularCards(card);
+                    handleRegularCards(card);
                 }
                 else {
                     handleSpecialCards(card);
@@ -127,12 +130,21 @@ public class UnoGameController implements ActionListener {
         }
     }
 
+    /**
+     * Disables GUI for AI Players.
+     */
+
     public void AIHandleGui(){
         setPlayerName();
         unoView.displaySampleCards(UnoGame.currentSide);
         disableButtons();
         unoView.nextPlayer.setEnabled(true);
     }
+
+    /**
+     * Checks for AI Players.
+     * @return true if player is an AI
+     */
 
     private boolean checkForAI() {
         return unoGame.getCurrentPlayer().AIFlag;
@@ -179,20 +191,20 @@ public class UnoGameController implements ActionListener {
         if (UnoGame.currentSide == UnoSide.LIGHT) {
             return
                     playedCard.getLightValue() != UnoValue.draw_five &&
-                    playedCard.getLightValue() != UnoValue.draw_one &&
-                    playedCard.getLightValue() != UnoValue.wild &&
-                    playedCard.getLightValue() != UnoValue.reverse &&
-                    playedCard.getLightValue() != UnoValue.skip &&
-                    playedCard.getLightValue() != UnoValue.wild_draw_two &&
-                    playedCard.getLightValue() != UnoValue.wild_draw_color &&
-                    playedCard.getLightValue() != UnoValue.flip;
+                            playedCard.getLightValue() != UnoValue.draw_one &&
+                            playedCard.getLightValue() != UnoValue.wild &&
+                            playedCard.getLightValue() != UnoValue.reverse &&
+                            playedCard.getLightValue() != UnoValue.skip &&
+                            playedCard.getLightValue() != UnoValue.wild_draw_two &&
+                            playedCard.getLightValue() != UnoValue.wild_draw_color &&
+                            playedCard.getLightValue() != UnoValue.flip;
         }else return
                 playedCard.getDarkValue() != UnoValue.draw_five &&
-                playedCard.getDarkValue() != UnoValue.reverse &&
-                playedCard.getLightValue() != UnoValue.skip_everyone &&
-                playedCard.getDarkValue() != UnoValue.flip &&
-                playedCard.getDarkValue() != UnoValue.wild_draw_color &&
-                playedCard.getDarkValue() != UnoValue.wild;
+                        playedCard.getDarkValue() != UnoValue.reverse &&
+                        playedCard.getLightValue() != UnoValue.skip_everyone &&
+                        playedCard.getDarkValue() != UnoValue.flip &&
+                        playedCard.getDarkValue() != UnoValue.wild_draw_color &&
+                        playedCard.getDarkValue() != UnoValue.wild;
     }
 
     /**
