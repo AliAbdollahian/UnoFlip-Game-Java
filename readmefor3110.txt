@@ -1,4 +1,4 @@
-SYSC3110 Fall 2023 Project - Uno Flip card game! Milestone 2 Version 1.0; 14/11/2023
+SYSC3110 Fall 2023 Project - Uno Flip card game! Milestone 3 Version 1.0; 24/11/2023
 
 The project can be reached at:
 Website: www.brightspace.carleton.ca
@@ -12,8 +12,8 @@ ___________
 
 1. Ali Abdollahian
 2. Antonio Cinotti Ballarte
-3. Arkan Slabi
-4. Warda Saleh
+3. Warda Saleh
+4. Arkan Slabi
 
 
 Project Description:
@@ -23,18 +23,18 @@ ___________
 - All classes and their descritions of the text-based playable version are listed below and in a package
 - UnoGame.java: Main class which handles the Uno Flip card Game and relevant interactions 
 - Deck.java: Holds the deck of cards and discard pile for the game with shuffling and add/remove methods
-- Player.java: Class containing the players of the games scores, names, and hand
-- Card.java: associates each card with light & dark colours & values with methods to retrieve them
-- Value.java: Contains enumurator of the values/Action Cards 
-- Side.java: Contains enumarator of the sides of cards, LIGHT & DARK
-- Color.java: Contains enumarator of possible colours for each card
-- UnoGameModel: Uno Game's dynamic structures class which manages the logic of the game
+- UnoPlayer.java: Class containing the human players and AI players.
+- UnoCard.java: associates each card with light & dark colours & values with methods to retrieve them
+- UnoValue.java: Contains enumurator of the values/Action Cards 
+- UnoSide.java: Contains enumarator of the sides of cards, LIGHT & DARK
+- UnoColor.java: Contains enumarator of possible colours for each card
+- UnoGame: Uno Game's dynamic structures class which manages the logic of the game
 - UnoGameController: Accept user input actions and converts it to commands for the model.
-- UnoGameView: This the the visual representation class of the UNO Flip Game.
+- UnoView: This the the visual representation class of the UNO Flip Game.
 - UnoGame.Test
-- Deck.Test
-- Player.Test
-- Card.Test
+- UnoDeck.Test
+- UnoPlayer.Test
+- UnoCard.Test
 
 
 Contributions:
