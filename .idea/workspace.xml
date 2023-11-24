@@ -4,22 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b215dc1-6161-4648-bbd8-cb331679e669" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/UnoAliVersion.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoCard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoColor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoDeck.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoGame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoGameController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoPlayer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoSide.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/UnoView.java" afterDir="false" />
+    <list default="true" id="3b215dc1-6161-4648-bbd8-cb331679e669" name="Changes" comment="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UnoGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UnoGameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoGameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UnoPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoPlayer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,12 +81,37 @@
       <updated>1700613591080</updated>
       <workItem from="1700613592368" duration="1940000" />
       <workItem from="1700658452570" duration="16597000" />
-      <workItem from="1700701385202" duration="29891000" />
+      <workItem from="1700701385202" duration="31553000" />
+      <workItem from="1700847026727" duration="9486000" />
     </task>
+    <task id="LOCAL-00001" summary="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part.">
+      <option name="closed" value="true" />
+      <created>1700784732469</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1700784732469</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part." />
+    <option name="LAST_COMMIT_MESSAGE" value="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

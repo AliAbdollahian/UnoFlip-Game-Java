@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 /**
  * The controller class for the UNO game, responsible for handling user input,
@@ -86,12 +87,55 @@ public class UnoGameController implements ActionListener {
      */
     public void nextPlayerClicked() {
         checkForWinner();
-        unoView.drawCard.setEnabled(true);
-        unoGame.nextPlayer(unoGame.currentPlayerIndex);
+            unoView.drawCard.setEnabled(true);
+            unoGame.nextPlayer(unoGame.currentPlayerIndex);
+//            unoView.handPanel.setEnabled(true);
+            setPlayerName();
+            unoView.displaySampleCards(UnoGame.getCurrentSide());
+            unoView.status.setText(unoGame.getCurrentPlayer().getName() + "'s turn to play!");
+            unoView.nextPlayer.setEnabled(false);
+        if (checkForAI()){
+            handleAIPlayerTurn();
+            AIHandleGui();
+        }
+
+    }
+
+    public void handleAIPlayerTurn(){
+        disableButtons();
+        UnoPlayer ai = unoGame.getCurrentPlayer();
+        List<UnoCard> hand = ai.getHand();
+        for (UnoCard card : hand) {
+            if (unoGame.isValidPlay(UnoGame.topCard,card)) {
+                if (notASpecialCard(card)){
+                 handleRegularCards(card);
+                }
+                else {
+                    handleSpecialCards(card);
+                }
+                JOptionPane.showMessageDialog(null,"ai player number "+ai.getName()+" played a card: "+card);
+                unoView.status.setText(ai.getName()+" has played press next player");
+                break;
+            }else {
+                UnoCard drawnCard;
+                drawnCard = unoGame.deck.removeFromDeck();
+                ai.drawUnoCard(drawnCard);
+                JOptionPane.showMessageDialog(null,"ai player number "+ai.getName()+" drawn a card");
+                unoView.status.setText(ai.getName()+" has played press next player");
+                break;
+            }
+        }
+    }
+
+    public void AIHandleGui(){
         setPlayerName();
-        unoView.displaySampleCards(UnoGame.getCurrentSide());
-        unoView.status.setText(unoGame.getCurrentPlayer().getName()+"'s turn to play!");
-        unoView.nextPlayer.setEnabled(false);
+        unoView.displaySampleCards(UnoGame.currentSide);
+        disableButtons();
+        unoView.nextPlayer.setEnabled(true);
+    }
+
+    private boolean checkForAI() {
+        return unoGame.getCurrentPlayer().AIFlag;
     }
 
     /**
@@ -179,6 +223,7 @@ public class UnoGameController implements ActionListener {
         unoGame.discardPile.add(playedCard);
         unoView.status.setText("played: " + playedCard);
         unoView.setTopCardImage(playedCard);
+        UnoGame.topCard = playedCard;
         disableButtons();
     }
 
@@ -193,6 +238,7 @@ public class UnoGameController implements ActionListener {
         unoGame.discardPile.add(playedCard);
         unoView.status.setText("played: " + playedCard);
         unoView.setTopCardImage(playedCard);
+        UnoGame.topCard = playedCard;
         disableButtons();
     }
 

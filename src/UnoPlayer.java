@@ -8,6 +8,7 @@ import java.util.List;
 public class UnoPlayer {
 
     public String name;
+    public boolean AIFlag = false;
     public List<UnoCard> hand;
 
     /**
@@ -19,6 +20,13 @@ public class UnoPlayer {
         this.name = name;
         this.hand = new ArrayList<>();
     }
+
+    public UnoPlayer(int AiID) {
+        this.name = String.valueOf(AiID);
+        this.hand = new ArrayList<>();
+    }
+
+
     /**
      * Gets the name of the player.
      *

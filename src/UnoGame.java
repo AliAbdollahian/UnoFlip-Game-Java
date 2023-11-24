@@ -5,7 +5,8 @@ import java.util.*;
  * Represents the Uno game, managing the deck, players, and game state.
  */
 public class UnoGame {
-    
+
+    public static UnoCard topCard;
     public UnoDeck deck = new UnoDeck();
     public List<UnoCard> discardPile = new ArrayList();
     public List<UnoPlayer> players = this.initializePlayers();
@@ -29,6 +30,7 @@ public class UnoGame {
                     break;
                 }
                 this.deck.addToBottom(startingCard);
+                topCard = startingCard;
             } while (true);
 
             this.discardPile.add(startingCard);
@@ -60,25 +62,40 @@ public class UnoGame {
     public List<UnoPlayer> initializePlayers() {
         boolean validInput = false;
         do {
-            int playerCount = Integer.parseInt(JOptionPane.showInputDialog("Enter number of players (2-4): "));
+            try {
+                int aiNumbers = Integer.parseInt(JOptionPane.showInputDialog("Enter number of ai: "));
+                int playerCount = Integer.parseInt(JOptionPane.showInputDialog("Enter number of players (2-4): "));
 
-            if (playerCount > 1 && playerCount < 5) {
-                numOfPlayer = playerCount;
-                List<UnoPlayer> players = new ArrayList<>();
+                if (playerCount > 1 && playerCount < 5) {
+                    numOfPlayer = playerCount;
+                    List<UnoPlayer> players = new ArrayList<>();
 
-                for (int i = 0; i < playerCount; ++i) {
-                    String playerName = JOptionPane.showInputDialog("Enter name for Player " + (i + 1) + ": ");
-                    UnoPlayer player = new UnoPlayer(playerName);
+                    for (int i = 0; i < playerCount; ++i) {
+                        String playerName = JOptionPane.showInputDialog("Enter name for Player " + (i + 1) + ": ");
+                        UnoPlayer player = new UnoPlayer(playerName);
 
-                    for (int j = 0; j < 7; ++j) {
-                        player.drawUnoCard(this.deck.removeFromDeck());
+                        for (int j = 0; j < 7; ++j) {
+                            player.drawUnoCard(this.deck.removeFromDeck());
+                        }
+
+                        players.add(player);
                     }
+                    for (int i = 0; i < aiNumbers; ++i) {
+                        UnoPlayer player = new UnoPlayer(i);
+                        player.AIFlag = true;
 
-                    players.add(player);
+                        for (int j = 0; j < 7; ++j) {
+                            player.drawUnoCard(this.deck.removeFromDeck());
+                        }
+
+                        players.add(player);
+                    }
+                    return players;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Not a valid number of players!");
                 }
-                return players;
-            } else {
-                JOptionPane.showMessageDialog(null, "Not a valid number of players!");
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Invalid input. Please enter a valid number.");
             }
         } while (!validInput);
         return null;
