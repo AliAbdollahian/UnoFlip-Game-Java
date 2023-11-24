@@ -128,8 +128,6 @@ ___________
 - code (source + executable in jar file)
 - readme file explaining 
 - UML diagram showing the classes and relations
-- Sequence Diagram
-
 
 
 Milestone 1 Known Issues:
