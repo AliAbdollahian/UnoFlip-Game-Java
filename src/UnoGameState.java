@@ -19,7 +19,7 @@ public class UnoGameState {
 
 
     public UnoGameState(UnoDeck deck, List<UnoCard> discardPile, List<UnoPlayer> players, int currentPlayerIndex, UnoCard topCard, UnoSide currentSide, boolean clockwise, List<UnoCard> hand) {
-        this.deck = new UnoDeck(deck); // Assuming UnoDeck has a copy constructor
+        this.deck = new UnoDeck(deck); 
         this.discardPile = new ArrayList<>(discardPile);
         this.players = new ArrayList<>(players);
         this.currentPlayerIndex = currentPlayerIndex;
