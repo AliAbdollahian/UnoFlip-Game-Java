@@ -32,6 +32,13 @@ public class UnoCard {
         this.darkValue = darkValue;
     }
 
+    public UnoCard(UnoCard originalCard) {
+        this.lightColor = originalCard.lightColor;
+        this.lightValue = originalCard.lightValue;
+        this.darkColor = originalCard.darkColor;
+        this.darkValue = originalCard.darkValue;
+    }
+
     /**
      * Gets the color of the light side of the card.
      *

@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3b215dc1-6161-4648-bbd8-cb331679e669" name="Changes" comment="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part.">
+    <list default="true" id="3b215dc1-6161-4648-bbd8-cb331679e669" name="Changes" comment="AI part is added and issues are fixed">
+      <change afterPath="$PROJECT_DIR$/src/UnoGameState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UnoCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UnoDeck.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoDeck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/UnoGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoGame.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/UnoGameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoGameController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/UnoPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/UnoView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/UnoView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +50,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -82,7 +87,11 @@
       <workItem from="1700613592368" duration="1940000" />
       <workItem from="1700658452570" duration="16597000" />
       <workItem from="1700701385202" duration="31553000" />
-      <workItem from="1700847026727" duration="9486000" />
+      <workItem from="1700847026727" duration="11629000" />
+      <workItem from="1700875285307" duration="191000" />
+      <workItem from="1701009037746" duration="946000" />
+      <workItem from="1701469771217" duration="574000" />
+      <workItem from="1701809736437" duration="17548000" />
     </task>
     <task id="LOCAL-00001" summary="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part.">
       <option name="closed" value="true" />
@@ -92,7 +101,15 @@
       <option name="project" value="LOCAL" />
       <updated>1700784732469</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="AI part is added and issues are fixed">
+      <option name="closed" value="true" />
+      <created>1700863919189</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1700863919189</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -111,7 +128,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part." />
-    <option name="LAST_COMMIT_MESSAGE" value="Ali's new implementation of the UnoGame with fixed functionalities of all special cards as well as action listener and dark side. This code is complete and only missing AI part." />
+    <MESSAGE value="AI part is added and issues are fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="AI part is added and issues are fixed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

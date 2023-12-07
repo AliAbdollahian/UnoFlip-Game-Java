@@ -24,7 +24,12 @@ public class UnoView extends JFrame {
     public JLabel currentPlayerLabel;
     public ImageIcon topCardImage;
     public String cardPath;
-
+    public JButton redo;
+    public JButton undo;
+    public JButton replay;
+    public JButton saveGame;
+    public JButton loadGame;
+    public ImageIcon GImage;
     /**
      * Constructs an instance of the `UnoView` class, initializing the UNO game controller
      * and creating the GUI frame by calling the `makeFrame` method.
@@ -95,11 +100,51 @@ public class UnoView extends JFrame {
         buttonPanel.add(drawCard, BorderLayout.EAST);
         drawCard.addActionListener(e->unoGameController.drawCardClicked());
 
+        JPanel extraButtonsPanel = new JPanel();
+        extraButtonsPanel.setLayout(new BorderLayout());
+
+        JPanel HalfButtons = new JPanel();
+        extraButtonsPanel.setLayout(new BorderLayout());
+
+        redo = new JButton("redo");
+        HalfButtons.add(redo,BorderLayout.WEST);
+        redo.addActionListener(e->unoGameController.redoClicked());
+        redo.setEnabled(false);
+
+        undo = new JButton("undo");
+        HalfButtons.add(undo,BorderLayout.EAST);
+        undo.addActionListener(e->unoGameController.undoClicked());
+        undo.setEnabled(false);
+
+        replay = new JButton("replay");
+        HalfButtons.add(replay,BorderLayout.NORTH);
+        replay.addActionListener(e->unoGameController.replayClicked());
+
+        saveGame = new JButton("Save Game");
+        HalfButtons.add(saveGame,BorderLayout.SOUTH);
+        saveGame.addActionListener(e->unoGameController.saveGameClicked());
+
+        loadGame = new JButton("Load Game");
+        HalfButtons.add(loadGame,BorderLayout.CENTER);
+        loadGame.addActionListener(e->unoGameController.loadGameClicked());
+
+        extraButtonsPanel.add(HalfButtons,BorderLayout.CENTER);
+
+        GImage = new ImageIcon("/Users/ali/Downloads/group23-high-resolution-logo.png");
+        Image originalImage = GImage.getImage();
+        int newWidth = 400;
+        int newHeight = 300;
+        Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        JLabel imageLabel = new JLabel(resizedIcon);
+        extraButtonsPanel.add(imageLabel,BorderLayout.SOUTH);
 
         nextPlayer = new JButton("Next Player");
         nextPlayer.addActionListener(e->unoGameController.nextPlayerClicked());
-        buttonPanel.add(nextPlayer, BorderLayout.WEST);
+        extraButtonsPanel.add(nextPlayer,BorderLayout.NORTH);
         nextPlayer.setEnabled(false);
+
+        buttonPanel.add(extraButtonsPanel, BorderLayout.WEST);
 
         handPanel = new JPanel();
         JScrollPane scroll = new JScrollPane(handPanel);

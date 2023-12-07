@@ -6,7 +6,7 @@ import java.util.*;
  */
 public class UnoGame {
 
-    public static UnoCard topCard;
+    public UnoCard topCard;
     public UnoDeck deck = new UnoDeck();
     public List<UnoCard> discardPile = new ArrayList();
     public List<UnoPlayer> players = this.initializePlayers();
@@ -15,6 +15,15 @@ public class UnoGame {
     public static UnoSide currentSide;
     int numOfPlayer;
     public boolean clockwise;
+    public int aiNumbers;
+    public int playerCount;
+    public List<UnoPlayer> unoPlayerArrayList;
+    public Stack<UnoGameState> undoStack;
+    public Stack<UnoGameState> redoStack;
+    public UnoGameState tempToSaveState;
+    public Stack<UnoGameState> undoStackTemp;
+    public Stack<UnoGameState> redoStackTemp;
+
 
     /**
      * Constructor for the UnoGame class.
@@ -37,7 +46,44 @@ public class UnoGame {
         } catch (NoSuchElementException e) {
             JOptionPane.showMessageDialog(null,"Error: No non-wild cards in the deck.");
         }
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
+        saveCurrentState();
     }
+
+    public void saveCurrentState() {
+        UnoGameState currentState = new UnoGameState(deck, discardPile, players, currentPlayerIndex,topCard,currentSide,clockwise,players.get(currentPlayerIndex).getHand());
+        undoStack.push(currentState);
+        redoStack.clear(); // Clear redo stack whenever a new state is saved
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            UnoGameState prevState = undoStack.pop();
+            redoStack.push(new UnoGameState(deck, discardPile, players, currentPlayerIndex,topCard,currentSide,clockwise, players.get(currentPlayerIndex).getHand()));
+            restoreState(prevState);
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            UnoGameState nextState = redoStack.pop();
+            undoStack.push(new UnoGameState(deck, discardPile, players, currentPlayerIndex,topCard,currentSide,clockwise, players.get(currentPlayerIndex).getHand()));
+            restoreState(nextState);
+        }
+    }
+
+    public void restoreState(UnoGameState state) {
+        this.deck = state.getDeck();
+        this.discardPile = state.getDiscardPile();
+        this.players = state.getPlayers();
+        this.currentPlayerIndex = state.getCurrentPlayerIndex();
+        topCard = state.getTopCard();
+        this.clockwise = state.isClockwise();
+        currentSide = state.getCurrentSide();
+        getCurrentPlayer().hand = state.getHand();
+    }
+
 
     /**
      * Checks if any player has an empty hand, indicating a winner.
@@ -63,34 +109,29 @@ public class UnoGame {
         boolean validInput = false;
         do {
             try {
-                int aiNumbers = Integer.parseInt(JOptionPane.showInputDialog("Enter number of ai: "));
-                int playerCount = Integer.parseInt(JOptionPane.showInputDialog("Enter number of players (2-4): "));
+                aiNumbers = Integer.parseInt(JOptionPane.showInputDialog("Enter number of ai: "));
+                playerCount = Integer.parseInt(JOptionPane.showInputDialog("Enter number of players (2-4): "));
 
                 if (playerCount > 1 && playerCount < 5) {
                     numOfPlayer = playerCount;
-                    List<UnoPlayer> players = new ArrayList<>();
-
+                     unoPlayerArrayList = new ArrayList<>();
                     for (int i = 0; i < playerCount; ++i) {
                         String playerName = JOptionPane.showInputDialog("Enter name for Player " + (i + 1) + ": ");
                         UnoPlayer player = new UnoPlayer(playerName);
-
                         for (int j = 0; j < 7; ++j) {
                             player.drawUnoCard(this.deck.removeFromDeck());
                         }
-
-                        players.add(player);
+                        unoPlayerArrayList.add(player);
                     }
                     for (int i = 0; i < aiNumbers; ++i) {
                         UnoPlayer player = new UnoPlayer(i);
                         player.AIFlag = true;
-
                         for (int j = 0; j < 7; ++j) {
                             player.drawUnoCard(this.deck.removeFromDeck());
                         }
-
-                        players.add(player);
+                        unoPlayerArrayList.add(player);
                     }
-                    return players;
+                    return unoPlayerArrayList;
                 } else {
                     JOptionPane.showMessageDialog(null, "Not a valid number of players!");
                 }
@@ -99,8 +140,8 @@ public class UnoGame {
             }
         } while (!validInput);
         return null;
-    }
 
+    }
 
     /**
      * Checks if a chosen card can be played on the top card of the discard pile.
@@ -455,5 +496,52 @@ public class UnoGame {
         }
         this.discardPile.add(startingCard);
         System.out.println("Starting card: " + this.discardPile.get(0));
+    }
+    public void replay() {
+        this.deck = new UnoDeck();
+
+        this.discardPile.clear();
+
+        UnoCard startingCard;
+        do {
+            startingCard = this.deck.removeFromDeck();
+            if (startingCard.getLightValue() != UnoValue.wild && startingCard.getLightValue() != UnoValue.wild_draw_two) {
+                break;
+            }
+            this.deck.addToBottom(startingCard);
+            topCard = startingCard;
+        } while (true);
+        for (UnoPlayer player : unoPlayerArrayList) {
+            player.getHand().clear();
+        }
+        for (UnoPlayer player: unoPlayerArrayList){
+        for (int j = 0; j < 7; ++j) {
+            player.drawUnoCard(this.deck.removeFromDeck());
+        }
+        }
+
+        this.discardPile.add(startingCard);
+        this.currentPlayerIndex = 0;
+        this.chosenColor = null;
+        this.currentSide = UnoSide.LIGHT;
+        this.clockwise = true;
+    }
+
+    public void saveCurrentStateInVariable() {
+        tempToSaveState = new UnoGameState(deck, discardPile, players, currentPlayerIndex,topCard,currentSide,clockwise, players.get(currentPlayerIndex).getHand());
+        undoStackTemp = undoStack;
+        redoStackTemp = redoStack;
+    }
+    public void LoadState(UnoGameState state,Stack<UnoGameState> undoStack, Stack<UnoGameState> redoStack) {
+        this.deck = state.getDeck();
+        this.discardPile = state.getDiscardPile();
+        this.players = state.getPlayers();
+        this.currentPlayerIndex = state.getCurrentPlayerIndex();
+        topCard = state.getTopCard();
+        this.clockwise = state.isClockwise();
+        currentSide = state.getCurrentSide();
+        getCurrentPlayer().hand = state.getHand();
+        this.redoStack = redoStack;
+        this.undoStack = undoStack;
     }
 }

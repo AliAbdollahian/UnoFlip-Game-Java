@@ -15,6 +15,15 @@ public class UnoDeck {
         this.UNODeck();
     }
 
+    public UnoDeck(UnoDeck originalDeck) {
+        this.deck = new ArrayList<>(originalDeck.deck.size());
+
+        for (UnoCard originalCard : originalDeck.deck) {
+            UnoCard copiedCard = new UnoCard(originalCard);
+            this.deck.add(copiedCard);
+        }
+    }
+
 
     /**
      * Adds a Uno card to the bottom of the deck.

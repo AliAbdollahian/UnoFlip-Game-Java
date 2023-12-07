@@ -37,6 +37,16 @@ public class UnoGameController implements ActionListener {
             drawCardClicked();
         }else if(e.getSource() == unoView.handPanel){
             playerChoseACard(unoView.cardPath);
+        }else if(e.getSource() == unoView.replay) {
+            replayClicked();
+        }else if(e.getSource() == unoView.redo) {
+            redoClicked();
+        }else if(e.getSource() == unoView.undo) {
+            undoClicked();
+        }else if(e.getSource() == unoView.saveGame) {
+            saveGameClicked();
+        }else if(e.getSource() == unoView.loadGame) {
+            loadGameClicked();
         }
     }
 
@@ -63,6 +73,7 @@ public class UnoGameController implements ActionListener {
             } else {
                 unoGame.resetGame();
                 unoView.displaySampleCards(UnoGame.currentSide);
+                unoView.frame.pack();
             }
         }
     }
@@ -71,6 +82,7 @@ public class UnoGameController implements ActionListener {
      * Handles the draw card action.
      */
     public void drawCardClicked() {
+        unoGame.saveCurrentState();
         UnoCard drawnCard;
         if (unoGame.deck.isEmpty()){
             unoGame.refillingDeckFromDiscard();}
@@ -78,27 +90,31 @@ public class UnoGameController implements ActionListener {
         unoGame.players.get(unoGame.currentPlayerIndex).drawUnoCard(drawnCard);
         unoView.status.setText("drawn "+drawnCard.toString()+" card");
         unoView.displaySampleCards(UnoGame.getCurrentSide());
+        unoView.frame.pack();
         unoView.nextPlayer.setEnabled(true);
         disableButtons();
+        unoView.undo.setEnabled(true);
+
     }
 
     /**
      * Handles the next player action.
      */
     public void nextPlayerClicked() {
+        unoGame.saveCurrentState();
         checkForWinner();
             unoView.drawCard.setEnabled(true);
             unoGame.nextPlayer(unoGame.currentPlayerIndex);
-//            unoView.handPanel.setEnabled(true);
             setPlayerName();
             unoView.displaySampleCards(UnoGame.getCurrentSide());
+            unoView.frame.pack();
             unoView.status.setText(unoGame.getCurrentPlayer().getName() + "'s turn to play!");
             unoView.nextPlayer.setEnabled(false);
         if (checkForAI()){
             handleAIPlayerTurn();
             AIHandleGui();
         }
-
+        unoView.undo.setEnabled(true);
     }
 
     public void handleAIPlayerTurn(){
@@ -106,7 +122,7 @@ public class UnoGameController implements ActionListener {
         UnoPlayer ai = unoGame.getCurrentPlayer();
         List<UnoCard> hand = ai.getHand();
         for (UnoCard card : hand) {
-            if (unoGame.isValidPlay(UnoGame.topCard,card)) {
+            if (unoGame.isValidPlay(unoGame.topCard,card)) {
                 if (notASpecialCard(card)){
                  handleRegularCards(card);
                 }
@@ -130,6 +146,7 @@ public class UnoGameController implements ActionListener {
     public void AIHandleGui(){
         setPlayerName();
         unoView.displaySampleCards(UnoGame.currentSide);
+        unoView.frame.pack();
         disableButtons();
         unoView.nextPlayer.setEnabled(true);
     }
@@ -201,6 +218,7 @@ public class UnoGameController implements ActionListener {
      * @param cardPath The path to the chosen card image file.
      */
     public void playerChoseACard(String cardPath) {
+        unoGame.saveCurrentState();
         UnoCard playedCard = extractUnoCard(cardPath);
         if (!notASpecialCard(playedCard)){
             handleSpecialCards(playedCard);
@@ -211,6 +229,8 @@ public class UnoGameController implements ActionListener {
             unoView.status.setText("Not a valid card to play with");
         }
         unoView.nextPlayer.setEnabled(true);
+        unoView.undo.setEnabled(true);
+
     }
 
     /**
@@ -223,7 +243,7 @@ public class UnoGameController implements ActionListener {
         unoGame.discardPile.add(playedCard);
         unoView.status.setText("played: " + playedCard);
         unoView.setTopCardImage(playedCard);
-        UnoGame.topCard = playedCard;
+        unoGame.topCard = playedCard;
         disableButtons();
     }
 
@@ -238,7 +258,7 @@ public class UnoGameController implements ActionListener {
         unoGame.discardPile.add(playedCard);
         unoView.status.setText("played: " + playedCard);
         unoView.setTopCardImage(playedCard);
-        UnoGame.topCard = playedCard;
+        unoGame.topCard = playedCard;
         disableButtons();
     }
 
@@ -254,5 +274,48 @@ public class UnoGameController implements ActionListener {
             }
         }
         unoView.drawCard.setEnabled(false);
+    }
+
+    public void redoClicked() {
+        unoGame.redo();
+        setPlayerName();
+        unoView.setTopCardImage(unoGame.topCard);
+        unoView.status.setText(unoGame.getCurrentPlayer().getName() + " pressed redo button");
+        unoView.displaySampleCards(UnoGame.getCurrentSide());
+        unoView.frame.pack();
+        disableButtons();
+    }
+
+    public void undoClicked() {
+        unoGame.undo();
+        setPlayerName();
+        unoView.setTopCardImage(unoGame.topCard);
+        unoView.status.setText(unoGame.getCurrentPlayer().getName() + " pressed undo button");
+        unoView.displaySampleCards(UnoGame.getCurrentSide());
+        unoView.frame.pack();
+        unoView.redo.setEnabled(true);
+        unoView.drawCard.setEnabled(true);
+    }
+
+    public void replayClicked() {
+        unoGame.replay();
+        setPlayerName();
+        unoView.status.setText(unoGame.getCurrentPlayer().getName() + " pressed replay button");
+        unoView.displaySampleCards(UnoGame.getCurrentSide());
+        unoView.frame.pack();
+        unoView.setTopCardImage(null);
+    }
+
+    public void saveGameClicked() {
+        unoGame.saveCurrentStateInVariable();
+        JOptionPane.showMessageDialog(null,"State of the game has been saved successfully!!");
+    }
+
+    public void loadGameClicked() {
+        unoGame.LoadState(unoGame.tempToSaveState,unoGame.undoStackTemp,unoGame.redoStackTemp);
+        setPlayerName();
+        unoView.setTopCardImage(unoGame.topCard);
+        unoView.displaySampleCards(UnoGame.getCurrentSide());
+        unoView.frame.pack();
     }
 }

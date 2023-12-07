@@ -9,6 +9,11 @@ public class UnoPlayer {
 
     public String name;
     public boolean AIFlag = false;
+
+    public void setHand(List<UnoCard> hand) {
+        this.hand = hand;
+    }
+
     public List<UnoCard> hand;
 
     /**
