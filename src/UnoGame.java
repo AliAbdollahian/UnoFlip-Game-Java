@@ -54,7 +54,7 @@ public class UnoGame {
     public void saveCurrentState() {
         UnoGameState currentState = new UnoGameState(deck, discardPile, players, currentPlayerIndex,topCard,currentSide,clockwise,players.get(currentPlayerIndex).getHand());
         undoStack.push(currentState);
-        redoStack.clear(); // Clear redo stack whenever a new state is saved
+        redoStack.clear();
     }
 
     public void undo() {

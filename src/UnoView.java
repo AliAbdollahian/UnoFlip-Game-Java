@@ -130,7 +130,7 @@ public class UnoView extends JFrame {
 
         extraButtonsPanel.add(HalfButtons,BorderLayout.CENTER);
 
-        GImage = new ImageIcon("/Users/ali/Downloads/group23-high-resolution-logo.png");
+        GImage = new ImageIcon("src/group23-high-resolution-logo.png");
         Image originalImage = GImage.getImage();
         int newWidth = 400;
         int newHeight = 300;
