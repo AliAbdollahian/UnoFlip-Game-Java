@@ -475,8 +475,31 @@ public class UnoGame {
         }
     }
 
-    public JsonObject saveAttributesToJson() {
-        JsonObject jsonObject = Json.createObjectBuilder()
+    public void saveCurrentStateInVariable() {
+
+        tempToSaveState = new UnoGameState(deck, discardPile, players, currentPlayerIndex,topCard,currentSide,clockwise, players.get(currentPlayerIndex).getHand());
+        undoStackTemp = undoStack;
+        redoStackTemp = redoStack;
+        saveAttributesToJson("Game.json");
+    }
+    public void LoadState(UnoGameState state,Stack<UnoGameState> undoStack, Stack<UnoGameState> redoStack)  {
+        this.deck = state.getDeck();
+        this.discardPile = state.getDiscardPile();
+        this.players = state.getPlayers();
+        this.currentPlayerIndex = state.getCurrentPlayerIndex();
+        topCard = state.getTopCard();
+        this.clockwise = state.isClockwise();
+        currentSide = state.getCurrentSide();
+        getCurrentPlayer().hand = state.getHand();
+        this.redoStack = redoStack;
+        this.undoStack = undoStack;
+        restoreFromJsonFile("Game.json");
+    }
+    
+
+    public void  saveAttributesToJson(String filePath) {
+        // Build the initial JSON object
+        JsonObjectBuilder mainJsonObjectBuilder = Json.createObjectBuilder()
                 .add("Top card", topCard.toString())
                 .add("Deck", deck.saveAttributesToJson_ArrayList())
                 .add("Player Index", currentPlayerIndex)
@@ -484,104 +507,80 @@ public class UnoGame {
                 .add("Current Side", currentSide.toString())
                 .add("NumberOfPlayers", numOfPlayer)
                 .add("Playing Direction", clockwise)
-                .build();
-        return jsonObject;
-    }
-    public JsonObject saveAttributesToJson_ArrayList(){
+                .add("AI Player's Number", aiNumbers)
+                .add("Count Players", playerCount)
+                .add("Playing Direction", tempToSaveState.toString());
+
+        // Build the JSON array for the discard pile
         JsonArrayBuilder jsonArrayBuilder1 = Json.createArrayBuilder();
+        for (int i = 0; i < this.discardPile.size(); i++) {
+            JsonObject cardJsonObject = this.discardPile.get(i).saveAttributesToJson();
+            jsonArrayBuilder1.add(cardJsonObject);
+        }
+
+        // Build the JSON array for players, unoPlayerArrayList, undoStack, redoStack, undoStackTemp, redoStackTemp
         JsonArrayBuilder jsonArrayBuilder2 = Json.createArrayBuilder();
+        for (int i = 0; i < this.players.size(); i++) {
+            JsonObject playerJsonObject = this.players.get(i).saveAttributesToJson();
+            jsonArrayBuilder2.add(playerJsonObject);
+        }
+        for (int i = 0; i < this.unoPlayerArrayList.size(); i++) {
+            JsonObject playerJsonObject = this.unoPlayerArrayList.get(i).saveAttributesToJson();
+            jsonArrayBuilder2.add(playerJsonObject);
+        }
+        for (int i = 0; i < this.undoStack.size(); i++) {
+            JsonObject cardJsonObject = this.undoStack.get(i).saveAttributesToJson();
+            jsonArrayBuilder2.add(cardJsonObject);
+        }
+        for (int i = 0; i < this.redoStack.size(); i++) {
+            JsonObject cardJsonObject = this.redoStack.get(i).saveAttributesToJson();
+            jsonArrayBuilder2.add(cardJsonObject);
+        }
+        for (int i = 0; i < this.undoStackTemp.size(); i++) {
+            JsonObject cardJsonObject = this.undoStackTemp.get(i).saveAttributesToJson();
+            jsonArrayBuilder2.add(cardJsonObject);
+        }
+        for (int i = 0; i < this.redoStackTemp.size(); i++) {
+            JsonObject cardJsonObject = this.redoStackTemp.get(i).saveAttributesToJson();
+            jsonArrayBuilder2.add(cardJsonObject);
+        }
 
-        for (int i = 0; i < this.discardPile.size() ; i++){
-            JsonObject jsonObject = this.discardPile.get(i).saveAttributesToJson();
-            jsonArrayBuilder1.add(i,jsonObject);
-        }
-        for (int i = 0; i < this.players.size() ; i++){
-            JsonObject jsonObject = this.players.get(i).saveAttributesToJson();
-            jsonArrayBuilder2.add(i,jsonObject);
-        }
-        // Build the JSON array
+        // Build the JSON arrays
         JsonArray jsonArrayList1 = jsonArrayBuilder1.build();
-        JsonArray jsonArrayList2 = jsonArrayBuilder2 .build();
+        JsonArray jsonArrayList2 = jsonArrayBuilder2.build();
 
-        JsonObject jsonObject = Json.createObjectBuilder()
-                .add("Discard Deck ", jsonArrayList1)
-                .add("Players ", jsonArrayList2)
-                .build();
+        // Add arrays to the main JSON object
+        mainJsonObjectBuilder.add("Discard Deck", jsonArrayList1)
+                .add("Players", jsonArrayList2)
+                .add("PlayerList", jsonArrayList2)
+                .add("UNDO", jsonArrayList2)
+                .add("REDO", jsonArrayList2)
+                .add("UNDO temp", jsonArrayList2)
+                .add("REDO temp", jsonArrayList2);
 
-        return jsonObject;
-    }
+        // Build the final JSON object
+        JsonObject finalJsonObject = mainJsonObjectBuilder.build();
 
-    public void saveJsonObjectsToFile(String fileName) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            for (int i = 0; i < discardPile.size(); i++){
-                JsonObject obj = discardPile.get(i).saveAttributesToJson();
-                writer.println(obj);
-            }
-        }
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            for (int i = 0; i < players.size(); i++){
-                JsonObject obj = players.get(i).saveAttributesToJson();
-                writer.println(obj);
-            }
-        }
-        catch (IOException e){
-            e.getMessage();
-        }
-    }
 
-    public void saveJsonObjectsToFile_ArrayList(String fileName) throws IOException {
-        try(PrintWriter writer = new PrintWriter(new FileWriter(fileName))){
-            JsonObject jsonObject = saveAttributesToJson_ArrayList();
-            writer.println(jsonObject);
-        }
-    }
-
-    public static ArrayList<UnoPlayer>  restoreFromJsonFile(String fileName) throws IOException {
-        ArrayList<UnoPlayer> players1 = new ArrayList<>();
-        FileInputStream fileInputStream = new FileInputStream(fileName);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(fileInputStream));
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String line;
-
-        // Read each line (each line is a JSON object)
-        while ((line = reader.readLine()) != null) {
-            UnoPlayer player1 = objectMapper.readValue(line, UnoPlayer.class);
-            players1.add(player1);
-        }
-        return players1;
-    }
-    public void  restoreFromJsonFile_ArrayList(String fileName) throws IOException {
-        try {
-            FileReader fileReader = new FileReader(fileName);
-            JsonReader jsonReader = Json.createReader(fileReader);
-
-            JsonObject jsonObject = jsonReader.readObject();
-            JsonArray jsonArray = jsonObject.getJsonArray("Players");
-
-            this.players = new ArrayList<>();
-            if (jsonArray != null) {
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    JsonObject empObject = jsonArray.getJsonObject(i);
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    // Create a StringWriter to write JSON string
-                    StringWriter stringWriter = new StringWriter();
-
-                    // Create a JsonWriter from StringWriter
-                    try (JsonWriter jsonWriter = Json.createWriter(stringWriter)) {
-                        // Write the JsonObject to the JsonWriter
-                        jsonWriter.writeObject(empObject);
-                    }
-                    // Get the JSON string from StringWriter
-                    String jsonString = stringWriter.toString();
-                    UnoPlayer player2 = objectMapper.readValue(jsonString, UnoPlayer.class);
-                    this.players.add(player2);
-                }
-            }
-            jsonReader.close();
-            fileReader.close();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
+            writer.println(finalJsonObject);
+            System.out.println("JSON saved successfully to: " + filePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error writing JSON to file: " + e.getMessage());
+        }
+    }
+
+
+
+    public static UnoGame restoreFromJsonFile(String fileName) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            UnoGame game = objectMapper.readValue(new File(fileName), UnoGame.class);
+            return game;
+        } catch (IOException e) {
+            System.err.println("Error reading JSON from file: " + e.getMessage());
+            return null; // Handle the error appropriately
         }
     }
 }
