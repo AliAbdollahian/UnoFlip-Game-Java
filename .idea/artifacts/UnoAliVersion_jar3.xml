@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UnoAliVersion:jar3">
+    <output-path>$PROJECT_DIR$/out/artifacts/UnoAliVersion_jar3</output-path>
+    <root id="archive" name="UnoAliVersion.jar">
+      <element id="module-output" name="UnoAliVersion" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Json &amp; Jackson JARS/javax.json-1.1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Json &amp; Jackson JARS/jackson-core-2.16.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Json &amp; Jackson JARS/jackson-databind-2.16.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../Json &amp; Jackson JARS/jackson-annotations-2.16.0.jar" path-in-jar="/" />
+      <element id="module-source" name="UnoAliVersion" />
+    </root>
+  </artifact>
+</component>
